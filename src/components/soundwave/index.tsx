@@ -9,7 +9,7 @@ interface SoundwaveProps {
 }
 
 const LoadingSpinner: React.FC = () => {
-  const mesh = useRef<Mesh>();
+  const mesh = useRef<Mesh | null>(null);
 
   useFrame(() => {
     if (mesh.current) {
@@ -27,7 +27,7 @@ const LoadingSpinner: React.FC = () => {
 };
 
 const Soundwave: React.FC<SoundwaveProps> = ({ audioFile, playing }) => {
-  const mesh = useRef<Group>();
+  const mesh = useRef<Group | null>(null);
   const analyser = useRef<AnalyserNode>();
   const data = useRef<Uint8Array>();
   const source = useRef<AudioBufferSourceNode>();

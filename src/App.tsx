@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Soundwave from "./components/soundwave";
 import "./App.css";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, Vector3 } from "@react-three/fiber";
 import { OrbitControls, OrthographicCamera } from "@react-three/drei";
 import { Leva } from "leva";
 
@@ -68,9 +68,9 @@ function App() {
 
   const getCameraPositionDesktopMobile = () => {
     if (window.innerWidth > 768) {
-      return [70, 40, 100];
+      return [70, 40, 100] as Vector3;
     } else {
-      return [120, 70, 30];
+      return [120, 70, 30] as Vector3;
     }
   };
 
