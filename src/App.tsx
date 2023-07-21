@@ -133,7 +133,7 @@ function App() {
           shadow-mapSize-width={2048}
           shadow-mapSize-height={2048}
         />
-        <OrbitControls enablePan={false} />
+        <OrbitControls enablePan={false} autoRotate={true} />
 
         <Soundwave audioFile="/waveform-r3f/sounds/grateful.mp3" playing={playing} />
         <OrthographicCamera
