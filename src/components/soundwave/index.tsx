@@ -134,7 +134,7 @@ const Soundwave: React.FC<SoundwaveProps> = ({ audioFile, playing }) => {
       label: "Factor",
     },
     bars: {
-      value: 128,
+      value: 1024,
       min: 128,
       max: 1024,
       label: "Bars",
@@ -151,7 +151,7 @@ const Soundwave: React.FC<SoundwaveProps> = ({ audioFile, playing }) => {
   return (
     <group ref={mesh} position={[-120, 0, 0]} castShadow>
       {loaded ? (
-        Array(bars / 2)
+        Array(bars)
           .fill(undefined)
           .map((_, i) => {
             const material = new MeshStandardMaterial({
