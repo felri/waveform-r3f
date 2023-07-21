@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Soundwave from "./components/soundwave";
 import "./App.css";
-import { Canvas, Vector3 } from "@react-three/fiber";
-import { OrbitControls, OrthographicCamera } from "@react-three/drei";
+import { Canvas, Vector3, useFrame, useThree } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
 import { Leva, useControls } from "leva";
 
 function Link({ children, href }: { children: React.ReactNode; href: string }) {
@@ -17,6 +17,15 @@ function Link({ children, href }: { children: React.ReactNode; href: string }) {
     </a>
   );
 }
+
+const Camera = (props: JSX.IntrinsicElements["perspectiveCamera"]) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ref = useRef<any>();
+  const set = useThree((state) => state.set);
+  useEffect(() => void set({ camera: ref.current }), []);
+  useFrame(() => ref.current?.updateMatrixWorld());
+  return <perspectiveCamera ref={ref} {...props} />;
+};
 
 function PlayIcon(): JSX.Element {
   return (
@@ -42,7 +51,7 @@ function PauseIcon(): JSX.Element {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="800"
-      height="800"
+      height="100"
       fill="none"
       viewBox="0 0 24 24"
     >
@@ -58,35 +67,55 @@ function PauseIcon(): JSX.Element {
 }
 
 function App() {
+  const getCameraPositionDesktopMobile = () => {
+    if (window.innerWidth > 768) {
+      return [100, 114, 88] as Vector3;
+    } else {
+      return [158, 186, 64] as Vector3;
+    }
+  };
+
   const [playing, setPlaying] = useState(false);
+  const [cameraPosition] = useState(
+    getCameraPositionDesktopMobile()
+  );
+  const [zoom] = useState(1);
 
   const { autoRotate } = useControls({
     autoRotate: {
       value: false,
       label: "Auto Rotate",
     },
+    // cameraX: {
+    //   value: 100,
+    //   min: 0,
+    //   max: 200,
+    //   label: "Camera X",
+    // },
+    // cameraY: {
+    //   value: 114,
+    //   min: 0,
+    //   max: 200,
+    //   label: "Camera Y",
+    // },
+    // cameraZ: {
+    //   value: 88,
+    //   min: 0,
+    //   max: 200,
+    //   label: "Camera Z",
+    // },
+    // cameraZoom: {
+    //   value: 1,
+    //   min: 0,
+    //   max: 10,
+    //   label: "Camera Zoom",
+    // },
   });
 
   // Update playing state when needed
   // You might want to connect this to a button or other UI element
   const togglePlaying = () => {
     setPlaying(!playing);
-  };
-
-  const getCameraPositionDesktopMobile = () => {
-    if (window.innerWidth > 768) {
-      return [70, 40, 100] as Vector3;
-    } else {
-      return [120, 70, 30] as Vector3;
-    }
-  };
-
-  const getCameraZoomDesktopMobile = () => {
-    if (window.innerWidth > 768) {
-      return 5;
-    } else {
-      return 2.5;
-    }
   };
 
   return (
@@ -131,8 +160,13 @@ function App() {
           {playing ? <PauseIcon /> : <PlayIcon />}
         </div>
       </div>
-      <Canvas shadows>
-        {/* <Perf /> */}
+      <Canvas shadows style={{ width: "100vw", height: "100vh" }}>
+        <Camera
+          position={cameraPosition}
+          zoom={zoom}
+          near={50}
+          far={4000}
+        />
         <ambientLight intensity={0.1} />
         <spotLight
           position={[0, 500, 200]}
@@ -145,117 +179,6 @@ function App() {
         <Soundwave
           audioFile="/waveform-r3f/sounds/grateful.mp3"
           playing={playing}
-        />
-        <OrthographicCamera
-          makeDefault
-          position={getCameraPositionDesktopMobile()}
-          zoom={getCameraZoomDesktopMobile()}
-          key={undefined}
-          view={undefined}
-          quaternion={undefined}
-          left={undefined}
-          right={undefined}
-          bottom={undefined}
-          onClick={undefined}
-          onPointerMissed={undefined}
-          attach={undefined}
-          args={undefined}
-          onUpdate={undefined}
-          up={undefined}
-          scale={undefined}
-          rotation={undefined}
-          matrix={undefined}
-          layers={undefined}
-          dispose={undefined}
-          onContextMenu={undefined}
-          onDoubleClick={undefined}
-          onPointerUp={undefined}
-          onPointerDown={undefined}
-          onPointerOver={undefined}
-          onPointerOut={undefined}
-          onPointerEnter={undefined}
-          onPointerLeave={undefined}
-          onPointerMove={undefined}
-          onPointerCancel={undefined}
-          onWheel={undefined}
-          castShadow={undefined}
-          addEventListener={undefined}
-          hasEventListener={undefined}
-          removeEventListener={undefined}
-          dispatchEvent={undefined}
-          visible={undefined}
-          type={undefined}
-          id={undefined}
-          uuid={undefined}
-          name={undefined}
-          parent={undefined}
-          modelViewMatrix={undefined}
-          normalMatrix={undefined}
-          matrixWorld={undefined}
-          matrixAutoUpdate={undefined}
-          matrixWorldAutoUpdate={undefined}
-          matrixWorldNeedsUpdate={undefined}
-          receiveShadow={undefined}
-          frustumCulled={undefined}
-          renderOrder={undefined}
-          animations={undefined}
-          userData={undefined}
-          customDepthMaterial={undefined}
-          customDistanceMaterial={undefined}
-          isObject3D={undefined}
-          onBeforeRender={undefined}
-          onAfterRender={undefined}
-          applyMatrix4={undefined}
-          applyQuaternion={undefined}
-          setRotationFromAxisAngle={undefined}
-          setRotationFromEuler={undefined}
-          setRotationFromMatrix={undefined}
-          setRotationFromQuaternion={undefined}
-          rotateOnAxis={undefined}
-          rotateOnWorldAxis={undefined}
-          rotateX={undefined}
-          rotateY={undefined}
-          rotateZ={undefined}
-          translateOnAxis={undefined}
-          translateX={undefined}
-          translateY={undefined}
-          translateZ={undefined}
-          localToWorld={undefined}
-          worldToLocal={undefined}
-          lookAt={undefined}
-          add={undefined}
-          remove={undefined}
-          removeFromParent={undefined}
-          clear={undefined}
-          getObjectById={undefined}
-          getObjectByName={undefined}
-          getObjectByProperty={undefined}
-          getObjectsByProperty={undefined}
-          getWorldPosition={undefined}
-          getWorldQuaternion={undefined}
-          getWorldScale={undefined}
-          getWorldDirection={undefined}
-          raycast={undefined}
-          traverse={undefined}
-          traverseVisible={undefined}
-          traverseAncestors={undefined}
-          updateMatrix={undefined}
-          updateMatrixWorld={undefined}
-          updateWorldMatrix={undefined}
-          toJSON={undefined}
-          clone={undefined}
-          copy={undefined}
-          top={undefined}
-          matrixWorldInverse={undefined}
-          projectionMatrix={undefined}
-          projectionMatrixInverse={undefined}
-          isCamera={undefined}
-          near={undefined}
-          far={undefined}
-          setViewOffset={undefined}
-          clearViewOffset={undefined}
-          updateProjectionMatrix={undefined}
-          isOrthographicCamera={undefined}
         />
       </Canvas>
     </div>

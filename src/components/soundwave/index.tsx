@@ -2,7 +2,6 @@ import { useRef, useEffect, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Group, SphereGeometry, MeshStandardMaterial, Mesh } from "three";
 import { useControls } from "leva";
-import { Text } from "@react-three/drei";
 
 interface SoundwaveProps {
   audioFile: string;
@@ -20,23 +19,10 @@ const LoadingSpinner: React.FC = () => {
   });
 
   return (
-    <>
-      <mesh ref={mesh} position={[95, 0, -15]}>
-        <boxGeometry args={[100, 100, 100]} />
-        <meshStandardMaterial color={"hotpink"} />
-        
-      </mesh>
-      <Text
-        color={"#fff"} // color of the text
-        anchorX="center" // center the text horizontally
-        anchorY="middle" // center the text vertically
-        position={[200, 0, 20]} // slightly in front of the cube
-        fontSize={30} // adjust the size
-        rotation={[0, Math.PI * .42, 0]} // rotate the text
-      >
-        Loading
-      </Text>
-    </>
+    <mesh ref={mesh} position={[-10, -10, -20]}>
+      <boxGeometry args={[30, 30, 30]} />
+      <meshStandardMaterial color={"hotpink"} />
+    </mesh>
   );
 };
 
@@ -148,33 +134,31 @@ const Soundwave: React.FC<SoundwaveProps> = ({ audioFile, playing }) => {
 
   const geometry = new SphereGeometry(1, 32, 32);
 
-  return (
+  return loaded ? (
     <group ref={mesh} position={[-120, 0, 0]} castShadow>
-      {loaded ? (
-        Array(bars)
-          .fill(undefined)
-          .map((_, i) => {
-            const material = new MeshStandardMaterial({
-              // Check if the randomColors flag is set, if so, generate a random color, otherwise use the color from the color picker
-              color: randomColors ? getRandomColor() : color,
-              transparent: true,
-              opacity: 0.8,
-            });
+      {Array(bars)
+        .fill(undefined)
+        .map((_, i) => {
+          const material = new MeshStandardMaterial({
+            // Check if the randomColors flag is set, if so, generate a random color, otherwise use the color from the color picker
+            color: randomColors ? getRandomColor() : color,
+            transparent: true,
+            opacity: 0.8,
+          });
 
-            return (
-              <mesh
-                key={i}
-                position={[i * 6, 0, 0]}
-                geometry={geometry}
-                material={material}
-                receiveShadow
-              />
-            );
-          })
-      ) : (
-        <LoadingSpinner />
-      )}
+          return (
+            <mesh
+              key={i}
+              position={[i * 6, 0, 0]}
+              geometry={geometry}
+              material={material}
+              receiveShadow
+            />
+          );
+        })}
     </group>
+  ) : (
+    <LoadingSpinner />
   );
 };
 
