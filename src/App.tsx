@@ -135,7 +135,7 @@ function App() {
         />
         <OrbitControls enablePan={false} />
 
-        <Soundwave audioFile="/sounds/grateful.mp3" playing={playing} />
+        <Soundwave audioFile="/waveform-r3f/sounds/grateful.mp3" playing={playing} />
         <OrthographicCamera
           makeDefault
           position={getCameraPositionDesktopMobile()}

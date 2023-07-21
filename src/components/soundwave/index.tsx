@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Group, SphereGeometry, MeshStandardMaterial, Mesh } from "three";
 import { useControls } from "leva";
+import { Text } from "@react-three/drei";
 
 interface SoundwaveProps {
   audioFile: string;
@@ -19,10 +20,23 @@ const LoadingSpinner: React.FC = () => {
   });
 
   return (
-    <mesh ref={mesh} position={[65, 0, -15]}>
-      <boxGeometry args={[100, 100, 100]} />
-      <meshStandardMaterial color={"hotpink"} />
-    </mesh>
+    <>
+      <mesh ref={mesh} position={[95, 0, -15]}>
+        <boxGeometry args={[100, 100, 100]} />
+        <meshStandardMaterial color={"hotpink"} />
+        
+      </mesh>
+      <Text
+        color={"#fff"} // color of the text
+        anchorX="center" // center the text horizontally
+        anchorY="middle" // center the text vertically
+        position={[200, 0, 20]} // slightly in front of the cube
+        fontSize={30} // adjust the size
+        rotation={[0, Math.PI * .42, 0]} // rotate the text
+      >
+        Loading
+      </Text>
+    </>
   );
 };
 
