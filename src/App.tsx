@@ -3,7 +3,7 @@ import Soundwave from "./components/soundwave";
 import "./App.css";
 import { Canvas, Vector3 } from "@react-three/fiber";
 import { OrbitControls, OrthographicCamera } from "@react-three/drei";
-import { Leva } from "leva";
+import { Leva, useControls } from "leva";
 
 function Link({ children, href }: { children: React.ReactNode; href: string }) {
   return (
@@ -59,6 +59,13 @@ function PauseIcon(): JSX.Element {
 
 function App() {
   const [playing, setPlaying] = useState(false);
+
+  const { autoRotate } = useControls({
+    autoRotate: {
+      value: false,
+      label: "Auto Rotate",
+    },
+  });
 
   // Update playing state when needed
   // You might want to connect this to a button or other UI element
@@ -133,9 +140,12 @@ function App() {
           shadow-mapSize-width={2048}
           shadow-mapSize-height={2048}
         />
-        <OrbitControls enablePan={false} autoRotate={true} />
+        <OrbitControls enablePan={false} autoRotate={autoRotate} />
 
-        <Soundwave audioFile="/waveform-r3f/sounds/grateful.mp3" playing={playing} />
+        <Soundwave
+          audioFile="/waveform-r3f/sounds/grateful.mp3"
+          playing={playing}
+        />
         <OrthographicCamera
           makeDefault
           position={getCameraPositionDesktopMobile()}
